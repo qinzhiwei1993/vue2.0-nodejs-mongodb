@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <h1>双向数据绑定原理</h1>
+    <input type="text" id="input"/>
+    <div id="inputBox"></div>
+    <script>
+        var obj = {
+            pwd:'123'
+        };
+        Object.defineProperty(obj, 'value', {
+            get: function(){
+                console.log('get value');
+            },
+            set: function(value){
+              console.log('set new value' +value);
+              document.getElementById('inputBox').innerText = value;
+            }
+        })
+
+        document.getElementById('input').addEventListener('keyup', function(event){
+            obj.value = event.target.value;
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "name": "vue2.0-nodejs-mongodb",
+  "version": "1.0.0",
+  "description": "vue2.0+nodejs+mongodb全栈打造商城",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qinzhiwei1993/vue2.0-nodejs-mongodb.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/qinzhiwei1993/vue2.0-nodejs-mongodb/issues"
+  },
+  "homepage": "https://github.com/qinzhiwei1993/vue2.0-nodejs-mongodb#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}
