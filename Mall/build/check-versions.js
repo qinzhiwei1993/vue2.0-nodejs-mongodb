@@ -1,6 +1,6 @@
 'use strict'
 const chalk = require('chalk')
-const semver = require('semver')  //版本检查工具
+const semver = require('semver')
 const packageConfig = require('../package.json')
 const shell = require('shelljs')
 
