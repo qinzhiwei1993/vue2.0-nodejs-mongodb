@@ -3,8 +3,16 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import VueLazyload from 'vue-lazyload';//图片懒加载
 
 Vue.config.productionTip = false
+
+//图片懒加载
+Vue.use(VueLazyload, {
+  preLoad: 1.3,
+  loading: '/static/loading-svg/loading-bars.svg',
+  attempt: 1
+})
 
 /* eslint-disable no-new */
 new Vue({

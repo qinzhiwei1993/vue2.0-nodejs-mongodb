@@ -18,5 +18,14 @@
   "homepage": "https://github.com/qinzhiwei1993/vue2.0-nodejs-mongodb#readme",
   "dependencies": {
     "express": "^4.16.2"
-  }
+  },
+  "engines": {
+    "node": ">= 4.0.0",
+    "npm": ">= 3.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ]
 }
