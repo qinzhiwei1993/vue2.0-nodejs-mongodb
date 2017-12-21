@@ -9,7 +9,7 @@
         <div class="filter-nav">
           <span class="sortby">Sort by:</span>
           <a href="javascript:void(0)" class="default cur">Default</a>
-          <a href="javascript:void(0)" class="price">Price <svg class="icon icon-arrow-short"><use xlink:href="#icon-arrow-short"></use></svg></a>
+          <a href="javascript:void(0)" class="price" @click="sort">Price <svg class="icon icon-arrow-short"><use xlink:href="#icon-arrow-short"></use></svg></a>
           <a href="javascript:void(0)" class="filterby stopPop" @click="showFilter">Filter by</a>
         </div>
         <div class="accessory-result">
@@ -29,11 +29,11 @@
               <ul>
                 <li v-for="goods in goodslist">
                   <div class="pic">
-                    <a href="#"><img v-lazy="'/static/' + goods.productImg" alt=""></a>
+                    <a href="#"><img v-lazy="'/static/' + goods.productImage" alt=""></a>
                   </div>
                   <div class="main">
                     <div class="name">{{ goods.productName }}</div>
-                    <div class="price" style="width: 100%;">{{ goods.productPrice }}</div>
+                    <div class="price" style="width: 100%;">{{ goods.salePrice }}</div>
                     <div class="btn-area">
                       <a href="javascript:;" class="btn btn--m" >加入购物车</a>
                     </div>
@@ -42,9 +42,10 @@
               </ul>
             </div>
             <div class="view-more-normal"
+                 v-infinite-scroll="loadMore"
                  infinite-scroll-disabled="busy"
                  infinite-scroll-distance="20">
-              <img src="./../assets/loading-spinning-bubbles.svg" v-if="false">
+              <img src="./../assets/loading-spinning-bubbles.svg" v-if="!allFound">
             </div>
           </div>
         </div>
@@ -88,7 +89,11 @@
             ],
             priceChecked: 'all',
             filterBy: false,
-            overLay: false
+            overLay: false,
+            pageNum: 1,
+            sortFlag: 1,
+            busy: true,
+            allFound: false
           }
       },
       components: {
@@ -100,13 +105,27 @@
           this.getGoodsList();
       },
       methods: {
-          getGoodsList(){
+          getGoodsList(flag){
+              var params = {
+                  pageNum: this.pageNum,
+                  sort: this.sortFlag
+              }
               axios({
-                url: 'http://127.0.0.1:3000/goods',
-                method: 'GET'
-              }).then(res=>{
-                  console.log(res);
-                  this.goodslist = res.data.result;
+                url: '/goods/list',
+                method: 'GET',
+                params: params
+              }).then(res => {
+                  if(flag){
+                      this.goodslist.push(...res.data.data);
+                      if(this.goodslist.length < res.data.total){
+                        this.busy = false;
+                      }else{
+                          this.allFound = true;
+                      }
+                  }else{
+                    this.goodslist = res.data.data;
+                    this.busy = false;
+                  }
               }).catch(err => {
                   console.log(err);
               })
@@ -119,10 +138,21 @@
               this.filterBy = true;
               this.overLay = true;
           },
-        closePop(){
+          closePop(){
               this.filterBy = false;
               this.overLay = false;
-        }
+          },
+          sort(){
+              this.pageNum = 1;
+              this.allFound = false;
+              this.sortFlag = this.sortFlag == 1 ? -1 : 1;
+              this.getGoodsList();
+          },
+        loadMore(){
+              this.pageNum++;
+              this.busy = true;
+              this.getGoodsList(true);
+          }
       }
   }
 </script>

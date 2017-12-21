@@ -5,20 +5,23 @@
     {
       "productId": 100001,
       "productName": "小米6",
-      "productPrice": 2499,
-      "productImg": "1.jpg"
+      "salePrice": 2499,
+      "productImg": "1.jpg",
+      "productNum": 100
     },
     {
       "productId": 100002,
       "productName": "小米7",
-      "productPrice": 3499,
-      "productImg": "2.jpg"
+      "salePrice": 3499,
+      "productImg": "2.jpg",
+      "productNum": 100
     },
     {
       "productId": 100003,
       "productName": "小米8",
-      "productPrice": 4499,
-      "productImg": "3.jpg"
+      "salePrice": 4499,
+      "productImg": "3.jpg",
+      "productNum": 500
     }
   ]
 }

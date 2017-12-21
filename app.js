@@ -1,5 +1,8 @@
 var express = require('express')
-    //, routes = require('./routes')
+    ,favicon = require('static-favicon')
+    ,cookieParser = require('cookie-parser')
+    ,bodyParser = require('body-parser')
+    ,mongoose=require('mongoose')
     , http = require('http')
     , path = require('path')
     , fs = require('fs')
@@ -7,11 +10,8 @@ var express = require('express')
     juicer.set('strip',false);
     juicer.register('JSON', JSON);
 
-
-var favicon = require('static-favicon');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var mongoose=require('mongoose');
+var config = require("./config")
+    , routes = require('./routes')
 
 global.__dirname = __dirname;
 
@@ -19,7 +19,7 @@ var app = express(),
     server = http.createServer(app);
 
 
-// all environments
+//all environments
 app.set('port', process.env.PORT || config.port);
 app.set('views', __dirname + '/views');
 
@@ -32,8 +32,8 @@ app.engine('html', function(path, options, fn){
 });
 app.set('view engine', 'html');
 app.set('view options', {layout: false});
-
-app.set('env', 'production');
+// production development
+app.set('env', 'development');
 
 app.use(favicon());
 app.use(bodyParser.json({limit: '100mb'}));
@@ -49,37 +49,9 @@ app.use(function (req, res, next) {
 });
 routes.runApp(app);
 
-require('./timer/timerProcessExpireKey')({});
-
 
 server.listen(app.get('port'), function(){
     console.log("Express server listening on port %d in %s mode", app.get('port'), app.get('env'));
 });
 
 module.exports = app;
-
-
-//var app = express();
-////app.set("view engine", 'ejs');
-//app.use(express.static('public'));
-//
-//app.use(function (req, res, next) {
-//    res.setHeader('Access-Control-Allow-Origin', '*');
-//    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-//    res.setHeader('Access-Control-Allow-Methods', 'POST, GET, PATCH, DELETE, OPTIONS');
-//    next();
-//});
-//
-//app.get('/goods', function(req, res, next){
-//    fs.readFile(__dirname + '/public/mock/goods.json', function(err ,data){
-//        if(err){
-//            console.log(err);
-//
-//        }else{
-//            res.send(data.toString());
-//        }
-//    })
-//})
-//
-//
-//app.listen(3000);
