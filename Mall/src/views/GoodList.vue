@@ -14,12 +14,12 @@
         </div>
         <div class="accessory-result">
           <!-- filter -->
-          <div class="filter stopPop" v-bind:class="{'filterby-show': filterBy}" id="filter">
+          <div class="filter stopPop" :class="{'filterby-show': filterBy}" id="filter">
             <dl class="filter-price">
               <dt>Price:</dt>
-              <dd><a href="javascript:void(0)" v-bind:class="{'cur': priceChecked == 'all'}" @click="priceChecked = 'all'">All</a></dd>
+              <dd><a href="javascript:void(0)" :class="{'cur': priceChecked == 'all'}" @click="priceChecked = 'all'">All</a></dd>
               <dd v-for="(price, index) in priceFilter">
-                <a href="javascript:void(0)" v-bind:class="{'cur': priceChecked == index}" @click="setPriceFilter(index)">{{ price.startPrice }} - {{ price.endPrice }}</a>
+                <a href="javascript:void(0)" :class="{'cur': priceChecked == index}" @click="setPriceFilter(index)">{{ price.startPrice }} - {{ price.endPrice }}</a>
               </dd>
             </dl>
           </div>
@@ -27,7 +27,7 @@
           <div class="accessory-list-wrap">
             <div class="accessory-list col-4">
               <ul>
-                <li v-for="goods in goodslist">
+                <li v-for="goods in goodslist_filter">
                   <div class="pic">
                     <a href="#"><img v-lazy="'/static/' + goods.productImage" alt=""></a>
                   </div>
@@ -35,7 +35,7 @@
                     <div class="name">{{ goods.productName }}</div>
                     <div class="price" style="width: 100%;">{{ goods.salePrice }}</div>
                     <div class="btn-area">
-                      <a href="javascript:;" class="btn btn--m" >加入购物车</a>
+                      <a href="javascript:;" class="btn btn--m">加入购物车</a>
                     </div>
                   </div>
                 </li>
@@ -85,6 +85,10 @@
               {
                 startPrice: '500.00',
                 endPrice: '1000.00'
+              },
+              {
+                startPrice: '1000.00',
+                endPrice: '以上'
               }
             ],
             priceChecked: 'all',
@@ -100,6 +104,23 @@
           NavHeader,
           NavFooter,
           NavBread
+      },
+      computed:{//计算属性，可以用于过滤数据
+        goodslist_filter: function(){
+          return this.goodslist.filter((value) => {
+            if(this.priceChecked == "all"){
+              return true;
+            }else if(this.priceChecked == 0){
+              return value.salePrice > 0 && value.salePrice <= 200;
+            }else if(this.priceChecked == 1){
+              return value.salePrice > 200 && value.salePrice <= 500;
+            }else if(this.priceChecked == 2){
+              return value.salePrice > 500 && value.salePrice <= 1000;
+            }else if(this.priceChecked == 3){
+              return value.salePrice > 1000;
+            }
+          });
+        }
       },
       mounted: function(){
           this.getGoodsList();
@@ -148,7 +169,7 @@
               this.sortFlag = this.sortFlag == 1 ? -1 : 1;
               this.getGoodsList();
           },
-        loadMore(){
+          loadMore(){
               this.pageNum++;
               this.busy = true;
               this.getGoodsList(true);
