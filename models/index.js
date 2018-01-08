@@ -10,8 +10,14 @@ var db = mongoose.createConnection(config.mongodb.str, config.mongodb.opts, func
 })
 
 require('./goods');
+require('./user');
+require('./carts');
+
 
 exports.Goods = db.model('Goods');
+exports.Users = db.model('Users');
+exports.Carts = db.model('Carts');
+
 
 exports.close = function(){
     db.close(function(){

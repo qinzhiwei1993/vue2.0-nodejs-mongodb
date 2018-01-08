@@ -4,7 +4,7 @@
 var file = './dev.js';// 开发环境下开启
 // var file = './qa.js';// 生产环境下开启
 
-var env = process.env.NODE_ENV || 'production';
+var env = process.env.NODE_ENV || 'production'; //设置系统环境变量
 env.toLowerCase();
 
 
