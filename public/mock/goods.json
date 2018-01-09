@@ -1,27 +1,23 @@
-{
-  "status": "0",
-  "message": "",
-  "result": [
-    {
-      "productId": 100001,
-      "productName": "小米6",
-      "salePrice": 2499,
-      "productImg": "1.jpg",
-      "productNum": 100
-    },
-    {
-      "productId": 100002,
-      "productName": "小米7",
-      "salePrice": 3499,
-      "productImg": "2.jpg",
-      "productNum": 100
-    },
-    {
-      "productId": 100003,
-      "productName": "小米8",
-      "salePrice": 4499,
-      "productImg": "3.jpg",
-      "productNum": 500
-    }
-  ]
-}
+[
+  {
+    "productId": 100001,
+    "productName": "小米6",
+    "productPrice": 499,
+    "productImg": "1.jpg"
+  },{
+  "productId": 100002,
+  "productName": "小米6",
+  "productPrice": 1499,
+  "productImg": "2.jpg"
+  },{
+  "productId": 100003,
+  "productName": "小米8",
+  "productPrice": 4499,
+  "productImg": "3.jpg"
+  },{
+  "productId": 100004,
+  "productName": "小米9",
+  "productPrice": 2499,
+  "productImg": "4.jpg"
+  }
+]

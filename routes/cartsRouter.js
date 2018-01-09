@@ -12,6 +12,7 @@ var utils = require('../utils');
 var looger = require('../Logger');
 
 
+//添加到购物车
 cartsRouter.get('/add', function(req, res, next){
     var params = URL.parse(req.url, true);
     var queryParams = req.query;
@@ -32,43 +33,29 @@ cartsRouter.get('/add', function(req, res, next){
     looger.info('----add to cart---');
 
     async.auto({
-        checkCart: function(callback){
-            cartsDao.findOne({accountId: accountId}, null, function(err, doc){
-                looger.info(doc);
+        findCart: function(callback){
+            cartsDao.findOne(queryParams, null, function(err, doc){
                 if(err){
-                    return callback(err);
+                    return callback(null);
                 }
 
-                if(_.isEmpty(doc)){
-                    var cart = {
-                        accountId: accountId,
-                        goods: []
-                    }
-
-                    return cartsDao.save(obj, function(err, doc){
-                        if(err){
-                            return callback(err);
-                        }
-                        callback(null, doc)
-                    })
-                }
-                callback(null, doc)
+                callback(null, doc);
             })
         },
-        findGoodsAndAdd: ["checkCart", function(result, callback){
-            var conditions = {
-                accountId: accountId,
-                goods: [{goodsId: goodsId}]
+        saveToMogodb: ["findCart", function(result, callback){
+            var cart_db = result.findCart;
+            if(_.isEmpty(cart_db)){//目前该商品没有加入购物车
+                cart_db = queryParams;
+            }else{
+                cart_db.num++;
             }
-            cartsDao.findOne(conditions, null, function(err, doc){
-                looger.info("---find goods---", doc)
+
+
+            cartsDao.save(cart_db, function(err, doc){
                 if(err){
                     return callback(err);
                 }
-
-                if(_.isEmpty(doc)){
-                    return result.goods.push({goodsId: goodsId, num: 1})
-                }
+                callback(null, doc);
             })
         }]
     }, function(err, results){
@@ -76,16 +63,49 @@ cartsRouter.get('/add', function(req, res, next){
             return utils.resToClient(res, params, {status: 500, errmsg: err.message});
         }
 
-        console.log(results);
+        var obj = {
+            status: 200,
+            msg: '保存成功',
+            data: results.saveToMogodb
+        }
+
+        utils.resToClient(res, params, obj);
     })
 })
 
-
-cartsRouter.get('/save', function(req, res, next){
+//购物车查询
+cartsRouter.get('/list', function(req, res, next){
+    var params = URL.parse(req.url, true);
     var queryparams = req.query;
-    console.log(queryparams);
-    cartsDao.save(queryparams, function(err, doc){
-        console.log(doc);
+    queryparams.pageNum = queryparams.pageNum || 1;
+    queryparams.pageSize = queryparams.pageSize || 10;
+    var accountId = queryparams.accountId;
+
+    var status = 400,
+        errmsg = "";
+
+    if(_.isEmpty(accountId)){
+        errmsg = "accountId is empty";
+    }
+
+    if(errmsg){
+        return utils.resToClient(res, params, {status: status, errmsg: errmsg})
+    }
+
+    async.auto({
+        findItems: function(callback){
+            cartsDao.getList({accountId: accountId}, null, queryparams, function(err, doc){
+                if(err){
+                    return callback(err);
+                }
+                callback(null, doc);
+            })
+        }
+    }, function(err, results){
+        if(err){
+            return utils.resToClient(res, params, {status: 500, errmsg: err.message})
+        }
+        utils.resToClient(res, params, {status: 200, data: results.findItems})
     })
 })
 
