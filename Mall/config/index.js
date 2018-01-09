@@ -14,6 +14,9 @@ module.exports = {
       '/goods':{
         target:'http://localhost:3000'
       },
+      '/carts':{
+        target:'http://localhost:3000'
+      }
     },
 
     // Various Dev Server settings

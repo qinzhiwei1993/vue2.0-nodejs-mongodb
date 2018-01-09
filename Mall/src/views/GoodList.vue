@@ -35,7 +35,7 @@
                     <div class="name">{{ goods.productName }}</div>
                     <div class="price" style="width: 100%;">{{ goods.salePrice }}</div>
                     <div class="btn-area">
-                      <a href="javascript:;" class="btn btn--m">加入购物车</a>
+                      <a href="javascript:;" class="btn btn--m" @click="addCart(goods._id)">加入购物车</a>
                     </div>
                   </div>
                 </li>
@@ -173,6 +173,23 @@
               this.pageNum++;
               this.busy = true;
               this.getGoodsList(true);
+          },
+          addCart(goodsId){
+            var params = {
+              accountId: 'qinzhiwei',
+              goodsId: goodsId
+            }
+            axios({
+              url: '/carts/add',
+              method: 'GET',
+              params: params
+            }).then((res) => {
+              if(res.data.status == 200 & res.data.msg == '保存成功'){
+                alert('添加购物车成功');
+              }
+            }).catch(err => {
+              console.log(err);
+            })
           }
       }
   }
