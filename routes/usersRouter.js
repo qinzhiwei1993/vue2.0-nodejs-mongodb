@@ -29,7 +29,7 @@ usersRouter.get('/register', function(req, res, next){
 
 
     if(errmsg){
-        utils.resToClient(res, params,{status: status, errmsg: errmsg})
+        return utils.resToClient(res, params,{status: status, errmsg: errmsg})
     }
 
     async.auto({
@@ -60,6 +60,62 @@ usersRouter.get('/register', function(req, res, next){
         }
         looger.info('-----user info ------', results.saveToMogodb);
         utils.resToClient(res, params, {status: 200, data: results.saveToMogodb})
+    })
+})
+
+usersRouter.post('/login', function(req, res, next){
+    var params = URL.parse(req.url, true);
+    var body = req.body,
+        accountId = body.accountId,
+        password = body.password;
+
+    var status = 400,
+        errmsg = "";
+
+    if(_.isEmpty(accountId) || _.isEmpty(password)){
+        errmsg = "accountId or password is empty";
+    }
+
+    if(errmsg){
+        return utils.resToClient(res, params, {status:status, errmsg:errmsg})
+    }
+
+    async.auto({
+        checkAccountId: function(callback){
+            usersDao.findOne({accountId: accountId}, null, function(err, doc){
+                if(err){
+                    return callback(err, {})
+                }
+
+                callback(null, doc);
+            })
+        },
+        checkPassword:['checkAccountId', function(result, callback){
+            var user = result.checkAccountId;
+            if(_.isEmpty(user)){
+                return callback(null, "用户名不存在")
+            }
+
+            if(user.password == password){
+                callback(null, 'ok')
+            }else{
+                callback(null, '密码错误')
+            }
+        }]
+    }, function(err, results){
+
+        looger.info("==== login result ===", results.checkPassword)
+        if(err){
+            return utils.resToClient(res, params, {status: 500, errmsg: err.message})
+        }
+
+        if(results.checkPassword == 'ok'){//登录成功
+            req.session.accountId = accountId;
+            return res.redirect('/');
+        }
+
+        utils.resToClient(res, params, {status: 400, errmsg: results.checkPassword})
+
     })
 })
 

@@ -6,7 +6,8 @@ var express = require('express')
     , http = require('http')
     , path = require('path')
     , fs = require('fs')
-    , juicer = require('juicer');
+    , juicer = require('juicer'),
+    session = require('express-session');
     juicer.set('strip',false);
     juicer.register('JSON', JSON);
 
@@ -35,11 +36,20 @@ app.set('view options', {layout: false});
 // production development
 app.set('env', 'development');
 
+//配置session
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true
+}))
+
 app.use(favicon());
 app.use(bodyParser.json({limit: '100mb'}));
 app.use(bodyParser.urlencoded());
 app.use(cookieParser('your secret here'));
 app.use(express.static(__dirname + '/public'));
+
+
 
 app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');

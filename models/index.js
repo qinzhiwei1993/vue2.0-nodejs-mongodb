@@ -9,6 +9,7 @@ var db = mongoose.createConnection(config.mongodb.str, config.mongodb.opts, func
     }
 })
 
+
 require('./goods');
 require('./user');
 require('./carts');
