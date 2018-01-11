@@ -41,18 +41,18 @@ goodsRouter.get('/list', function(req, res, next){
     })
 })
 
-goodsRouter.get('/add', function(req, res, next){
-    var params = URL.parse(req.url, true);
-    var obj = {
-        productId: 100001,
-        productName: "小米6",
-        salePrice: 2499,
-        productImg: "1.jpg",
-        productNum: 100
-    }
-    goodsDao.save(obj, function(err, result){
-        uitls.resToClient(res, params, {status: 200, data: result})
-    })
-})
+// goodsRouter.get('/add', function(req, res, next){
+//     var params = URL.parse(req.url, true);
+//     var obj = {
+//         productId: 100001,
+//         productName: "小米6",
+//         salePrice: 2499,
+//         productImg: "1.jpg",
+//         productNum: 100
+//     }
+//     goodsDao.save(obj, function(err, result){
+//         uitls.resToClient(res, params, {status: 200, data: result})
+//     })
+// })
 
 module.exports = goodsRouter;

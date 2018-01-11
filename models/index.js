@@ -13,11 +13,16 @@ var db = mongoose.createConnection(config.mongodb.str, config.mongodb.opts, func
 require('./goods');
 require('./user');
 require('./carts');
+require('./address')
+require('./orders');
 
 
 exports.Goods = db.model('Goods');
 exports.Users = db.model('Users');
 exports.Carts = db.model('Carts');
+exports.Address = db.model('Address');
+exports.Orders = db.model('Orders');
+
 
 
 exports.close = function(){

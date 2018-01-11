@@ -5,8 +5,7 @@ var goodsSchema = new Schema({
     productId: String,
     productName: String,
     salePrice: Number,
-    productImage: String,
-    productNum: Number
+    productImage: String
 })
 
 mongoose.model('Goods', goodsSchema);

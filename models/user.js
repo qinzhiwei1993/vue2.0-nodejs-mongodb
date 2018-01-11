@@ -5,7 +5,9 @@ var userSchema = new Schema({
     nickName: String,
     headimgurl: String,
     accountId: String, //用户名 唯一的
-    password: String //密码
+    password: String, //密码
+    phone: Number,
+    address: String
 })
 
 mongoose.model('Users', userSchema); //users

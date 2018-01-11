@@ -176,7 +176,7 @@
           },
           addCart(goodsId){
             var params = {
-              accountId: 'qinzhiwei',
+              accountId: 'qinzhiwei', //qinzhiwei
               goodsId: goodsId
             }
             axios({

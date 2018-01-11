@@ -22,3 +22,34 @@ npm run build
 # build for production and view the bundle analyzer report
 npm run build --report
 ```
+
+### 接口
+
+====goodslist======================
+
+/goods/list  get
+
+
+
+==== users ========================
+
+/users/login  get: accountId password
+
+/users/register get accountId password
+
+
+====== carts ===========================
+
+/carts/add  get: accountId goodsId
+
+/carts/list  get: accountId
+
+
+====== orders ============================
+
+/orders/save  post: users_id addressId goodsArr
+
+/orders/list  get: users_id
+
+
+

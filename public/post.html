@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>post提交</title>
+</head>
+<body>
+    <button onclick="post()"></button>
+    <script src="/js/jquery-3.2.1.min.js"></script>
+    <script>
+        function post() {
+//            var obj =
+            $.ajax({
+                url: '/carts/list?accountId=qinzhiwei',
+                method: 'get',
+                success: function(res){
+                    console.log(res.data.goods);
+                    if(res.status == 200){
+                        var data = res.data.goods;
+                        var arr = [];
+                        var price = 0;
+                        for(var i = 0; i < data.length; i++){
+                            var obj = data[i].goodsId;
+                            obj.num = data[i].num;
+                            arr.push(obj);
+                            price += data[i].num * data[i].goodsId.salePrice
+                        }
+                        $.ajax({
+                            url: '/orders/save?addressId=5a5706cfc3666e017a100285&accountId=5a56d46fc3666e017a100281',
+                            method: 'POST',
+                            data: {
+                                goods: arr,
+                                price: price
+                            },
+                            success: function(res){
+                                console.log(res);
+                            }
+                        })
+                    }
+                }
+            })
+        }
+    </script>
+</body>
+</html>
